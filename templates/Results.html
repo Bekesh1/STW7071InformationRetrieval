@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Paper Search Results</title>
+    <meta charset="utf-8" />
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #2E8B57;
+            font-family: "Optima", sans-serif;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 10px;
+            margin-top: 5px;
+            padding: 10px;
+        }
+
+        h1 {
+            color: #00060c;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        p {
+            color: #0e0101;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .input-group-append .btn {
+            background-color: #900603;
+            border-color: #f70505;
+        }
+
+        .input-group-append .btn:hover {
+            background-color: #efc977;
+        }
+
+        .card {
+            background-color: #f9f9fc;
+            border: 1px solid #aa1414;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(245, 104, 104, 0.2);
+        }
+
+        .card-title {
+            color: #150e55;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-text {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .badge {
+            background-color: #69b4c0;
+            color: #fff;
+            font-size: 14px;
+            margin-right: 5px;
+            padding: 6px 8px;
+        }
+
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            text-align: center;
+            padding: 0px;
+            margin-bottom: 5px;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin: 10px;
+        }
+    </style>
+    <header>
+        <!-- Place the logo image inside the header -->
+        <img class="logo" src="C:\Users\Bekesh\Desktop\Information Retrieval\R.jpg" alt="Logo">
+    </header>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="mt-5">PAPER SEARCH RESULTS</h1>
+        <p>Showing results for: {{ query }}</p>
+
+        <!-- Search Bar -->
+        <form action="/search" method="POST" class="my-4">
+            <div class="input-group">
+                <input type="text" class="form-control" name="query" placeholder="Please Enter query">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="card-columns">
+            {% if papers %}
+            {% for paper in papers %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">{{ paper.title }}</h4>
+                    <p class="card-text">
+                        <strong>Authors:</strong>
+                        {% for author in paper.authors %}
+                        {% set authorUrl = author|lower|replace(' ', '-') %}
+                        {% set authorUrl = "/authors/" + authorUrl %}
+                        <a href="{{ authorUrl }}">{{ author }}</a>{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p class="card-text">Tags:
+                        {% for tag in paper.tags %}
+                        <span class="badge">{{ tag }}</span>
+                        {% endfor %}
+                    </p>
+                    <a href="{{ paper.link }}" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                No results found for: {{ query }}
+            </div>
+            {% endif %}
+        </div>
+        <footer class="footer">
+            <p class="footer-text">Created by Bikesh Khatri</p>
+            <p class="footer-text">Module: Information Retrieval System</p>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
